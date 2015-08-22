@@ -1,0 +1,89 @@
+"Stopwatch: The Game"
+
+import simplegui
+
+# define global variables
+
+time = 0 
+text_minute = "0:00:0"
+win="0"
+game="0"
+game_result="0/0"
+running = False
+
+# define helper function format that converts time
+# in tenths of seconds into formatted string A:BC.D
+def format(t):
+    global text_minute
+    minute = t/600 
+    second = t%600/10
+    msecond = (t%600)%10
+    if second < 10: 
+        text_minute = str(minute)+":0"+str(second)+":"+str(msecond)
+    else:
+        text_minute = str(minute)+":"+str(second)+":"+str(msecond)
+    return text_minute
+
+# define event handlers for buttons; "Start", "Stop", "Reset"
+def start():
+    ticks.start()
+    global running
+    running = True 
+
+def stop():
+    global time,win,game,game_result, running
+    ticks.stop()
+    
+    if running == True:
+        if time%600%10==0:
+            win = int(win)+1
+            game = int(game)+1
+        else:
+            game = int(game)+1
+
+    game_result = str(win) + "/" + str(game) 
+    # ensure hitting stop twice won't affect your score
+    running = False
+    
+    return game_result
+
+def reset():
+    global time, time_minute, game_result, win,game
+    win="0"
+    game="0"
+    time = 0
+    game_result = "0/0"
+    text_minute = format(time)
+    ticks.stop()
+    return str(text_minute)
+    
+    
+# define event handler for timer with 0.1 sec interval
+
+def tick():
+    global time, text_minute
+    time = time + 1
+    text_minute = format(time)
+    return str(text_minute)
+
+# define draw handler
+
+def draw(canvas):
+    canvas.draw_text(text_minute,[115,150],30,"Red")
+    canvas.draw_text(game_result,[240,30],30,"White")
+    
+# create frame
+timer = simplegui.create_frame("timer",300,300)
+timer.set_draw_handler(draw)
+
+ticks = simplegui.create_timer(100, tick)
+
+# register event handlers
+timer.add_button("Start",start,100)
+timer.add_button("Stop",stop,100)
+timer.add_button("Reset",reset,100)
+
+# start frame
+timer.start()
+
+# Please remember to review the grading rubric

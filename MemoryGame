@@ -1,0 +1,176 @@
+# implementation of card game - Memory
+
+import simplegui
+import random
+
+# helper function to initialize globals
+def new_game():
+    global cards
+    global exposed_list
+    global discover
+    global temp
+    global count
+    global state
+    
+    
+    state = 0
+    count = 0 
+    exposed_list={}
+    discover={}
+    cards = range(8)
+    cards*=2 
+    random.shuffle(cards)
+    temp = [0,0]
+   
+    print cards
+    
+    for x in range(0,16):
+        exposed_list[x]=False
+        discover[x]=False
+    
+    print "exposed start"
+    print exposed_list 
+
+# define event handlers
+def mouseclick(pos):
+    # add game state logic here
+    global exposed_list
+    global temp 
+    global count 
+    global state 
+
+    if (pos[0] < 50):
+        exposed_list[0] = True 
+    if (50 < pos[0] < 100):
+        exposed_list[1] = True 
+    if (100 < pos[0] < 150):    
+        exposed_list[2] = True 
+    if (150 < pos[0] < 200):
+        exposed_list[3] = True 
+    if (200 < pos[0] < 250):
+        exposed_list[4] = True 
+    if (250 < pos[0] < 300):
+        exposed_list[5] = True 
+    if (300 < pos[0] < 350):
+        exposed_list[6] = True 
+    if (350 < pos[0] < 400):
+        exposed_list[7] = True 
+    if (400 < pos[0] < 450):
+        exposed_list[8] = True 
+    if (450 < pos[0] < 500): 
+        exposed_list[9] = True 
+    if (500 < pos[0] < 550): 
+        exposed_list[10] = True
+    if (550 < pos [0] < 600): 
+        exposed_list[11] = True
+    if (600 < pos [0] < 650): 
+        exposed_list[12] = True
+    if (650 < pos [0] < 700): 
+        exposed_list[13] = True
+    if (700 < pos [0] < 750): 
+        exposed_list[14] = True
+    if (750 < pos [0] < 800): 
+        exposed_list[15] = True	
+    
+
+    if state==0:
+        state = 1
+        temp[0] = pos[0]/50
+        print "state 0"
+    elif state==1:
+        state = 2
+        if pos[0]/50 != temp[0]:
+            temp[1] = pos[0]/50
+        else:
+            state = 1
+        print "state 1"
+    elif state==2:
+        state = 1
+        if cards[temp[0]] == cards[temp[1]]:
+            discover[temp[0]] = True
+            discover[temp[1]] = True
+        else:     
+            exposed_list[temp[0]] = False
+            exposed_list[temp[1]] = False
+        temp[0] = pos[0]/50
+        print "state 2"
+    else:
+        state = 1
+        
+    count+=1
+    
+   
+    
+# cards are logically 50x100 pixels in size    
+def draw(canvas):
+    card_x = 20 
+    card_y = 50
+    global exposed_list,count
+    label.set_text(str(count))
+   
+    for i in range(0,16):
+         canvas.draw_text(str(cards[i]),[(card_x),(card_y)],30,'white')
+         card_x += 50
+      
+    line_x = 0
+    for i in range(0,16): 
+        canvas.draw_line((line_x,0),(line_x,100),1,'white')
+        line_x += 50
+    
+        #poly_x = 0
+        #canvas.draw_polygon([(poly_x,0),(poly_x,100),(poly_x+50,100),(poly_x+50,0)],1,'black','green')
+        #poly_x += 50
+    
+    #print exposed_list.items()
+    if exposed_list[0] == False and discover[0] == False: 
+        canvas.draw_polygon([(0,0),(0,100),(50,100),(50,0)],1,'black','green')
+    if exposed_list[1] == False and discover[1] == False: 
+        canvas.draw_polygon([(50,0),(50,100),(100,100),(100,0)],1,'black','green')
+    if exposed_list[2] == False and discover[2] == False: 
+        canvas.draw_polygon([(100,0),(100,100),(150,100),(150,0)],1,'black','green')
+    if exposed_list[3] == False and discover[3] == False: 
+        canvas.draw_polygon([(150,0),(150,100),(200,100),(200,0)],1,'black','green')
+    if exposed_list[4] == False and discover[4] == False:
+        canvas.draw_polygon([(200,0),(200,100),(250,100),(250,0)],1,'black','green')
+    if exposed_list[5] == False and discover[5] == False:
+        canvas.draw_polygon([(250,0),(250,100),(300,100),(300,0)],1,'black','green')
+    if exposed_list[6] == False and discover[6] == False:
+        canvas.draw_polygon([(300,0),(300,100),(350,100),(350,0)],1,'black','green')
+    if exposed_list[7] == False and discover[7] == False:
+        canvas.draw_polygon([(350,0),(350,100),(400,100),(400,0)],1,'black','green')
+    if exposed_list[8] == False and discover[8] == False:
+        canvas.draw_polygon([(400,0),(400,100),(450,100),(450,0)],1,'black','green')
+    if exposed_list[9] == False and discover[9] == False:
+        canvas.draw_polygon([(450,0),(450,100),(500,100),(500,0)],1,'black','green')
+    if exposed_list[10] == False and discover[10] == False:
+        canvas.draw_polygon([(500,0),(500,100),(550,100),(550,0)],1,'black','green')
+    if exposed_list[11] == False and discover[11] == False:
+        canvas.draw_polygon([(550,0),(550,100),(600,100),(600,0)],1,'black','green')
+    if exposed_list[12] == False and discover[12] == False:
+        canvas.draw_polygon([(600,0),(600,100),(650,100),(650,0)],1,'black','green')
+    if exposed_list[13] == False and discover[13] == False:
+        canvas.draw_polygon([(650,0),(650,100),(700,100),(700,0)],1,'black','green')
+    if exposed_list[14] == False and discover[14] == False:
+        canvas.draw_polygon([(700,0),(700,100),(750,100),(750,0)],1,'black','green')
+    if exposed_list[15] == False and discover[15] == False:
+        canvas.draw_polygon([(750,0),(750,100),(800,100),(800,0)],1,'black','green')
+    
+    # move counter
+  
+
+# create frame and add a button and labels
+frame = simplegui.create_frame("Memory", 800, 100)
+frame.add_button("Reset", new_game)
+label = frame.add_label("hello")
+     
+
+
+# register event handlers
+frame.set_mouseclick_handler(mouseclick)
+frame.set_draw_handler(draw)
+
+# get things rolling
+new_game()
+frame.start()
+
+# Always remember to review the grading rubric
